@@ -1,38 +1,42 @@
-const User = require('./User');
+// import all models
 const Post = require('./Post');
+const User = require('./User');
 const Vote = require('./Vote');
 const Comment = require('./Comment');
 
-//create associations
+// create associations
 User.hasMany(Post, {
-    foreignkey: 'user_id'
+  foreignKey: 'user_id'
 });
 
 Post.belongsTo(User, {
   foreignKey: 'user_id',
+  onDelete: 'SET NULL'
 });
-
-
-// we're allowing both the User and Post models to query each other's information in the context of a vote. If we want to see which users voted on a single post, we can now do that. If we want to see which posts a single user voted on, we can see that too. This makes the data more robust and gives us more capabilities for visualizing this data on the client-side.
 
 User.belongsToMany(Post, {
   through: Vote,
   as: 'voted_posts',
-  foreignKey: 'user_id'
+
+  foreignKey: 'user_id',
+  onDelete: 'SET NULL'
 });
 
 Post.belongsToMany(User, {
   through: Vote,
   as: 'voted_posts',
-  foreignKey: 'post_id'
+  foreignKey: 'post_id',
+  onDelete: 'SET NULL'
 });
 
 Vote.belongsTo(User, {
-  foreignKey: 'user_id'
+  foreignKey: 'user_id',
+  onDelete: 'SET NULL'
 });
 
 Vote.belongsTo(Post, {
-  foreignKey: 'post_id'
+  foreignKey: 'post_id',
+  onDelete: 'SET NULL'
 });
 
 User.hasMany(Vote, {
@@ -44,15 +48,18 @@ Post.hasMany(Vote, {
 });
 
 Comment.belongsTo(User, {
-  foreignKey: 'user_id'
+  foreignKey: 'user_id',
+  onDelete: 'SET NULL'
 });
 
 Comment.belongsTo(Post, {
-  foreignKey: 'post_id'
+  foreignKey: 'post_id',
+  onDelete: 'SET NULL'
 });
 
 User.hasMany(Comment, {
-  foreignKey: 'user_id'
+  foreignKey: 'user_id',
+  onDelete: 'SET NULL'
 });
 
 Post.hasMany(Comment, {
